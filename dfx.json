@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "TrustBadge_backend": {
+      "main": "src/TrustBadge_backend/main.mo",
+      "type": "motoko"
+    },
+    "TrustBadge_frontend": {
+      "dependencies": [
+        "TrustBadge_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/TrustBadge_frontend/src/index.html"
+      },
+      "source": [
+        "src/TrustBadge_frontend/assets",
+        "dist/TrustBadge_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
