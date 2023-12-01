@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 // version
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
 // imports
 
@@ -17,60 +17,39 @@ pragma solidity ^0.8.18;
  * @notice This contract is for giving your comments/opinions on an article
  * @dev Does not implement anything
  */
-contract OpinioNect{
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract OpinioNect is Ownable {
     // Type declarations
-    // mapping(address => mapping(uint256 => uint256)) public outerMappings;
+
     // State variables
-    address private immutable i_owner;
     string[] public articleHash;
-    struct UserComment{
-        // mapping(address => string) userToarticleHash;
+    struct UserComment {
         address userAddress;
         string comment;
     }
     
     mapping(string => UserComment[]) public articleToUserComments;
 
-    // Events
     // Modifiers
-    modifier onlyOwner() {
-        require(msg.sender == i_owner, "Only Owner Action!");
-        // if (msg.sender != i_owner) revert FundMe__NotOwner();
+    modifier oneUserOneComment(string memory _articleHash) {
+        bool hasCommented = false;
+        UserComment[] memory comments = articleToUserComments[_articleHash];
+        for (uint256 i = 0; i < comments.length; i++) {
+            if (comments[i].userAddress == msg.sender) {
+                hasCommented = true;
+                break;
+            }
+        }
+        require(!hasCommented, "You have already commented on this article.");
         _;
     }
-    // modifier oneUserOneComment(string memory _articleHash) {
-    //     if(articleToUserComments[_articleHash].userAddress){
-    //         _;
-    //     }
-    // }
-    modifier oneUserOneComment(string memory _articleHash) {
-    bool hasCommented = false;
-    
-    // Iterate through existing comments for the article
-    UserComment[] memory comments = articleToUserComments[_articleHash];
-    for (uint256 i = 0; i < comments.length; i++) {
-        if (comments[i].userAddress == msg.sender) {
-            hasCommented = true;
-            break;
-        }
-    }
 
-    require(!hasCommented, "You have already commented on this article.");
-    _;
-    }
-
+    // Constructor
+    constructor(address initialOwner) Ownable(initialOwner) {}
 
     // Functions
-    // Layout of Functions:
-    // constructor
-    constructor() {
-        i_owner = msg.sender;
-    }
-
-    // receive function (if exists)
-    // fallback function (if exists)
-    // external
-    // public
     function addArticle(string calldata _articleHash) public onlyOwner {
         articleHash.push(_articleHash);
     }
@@ -99,5 +78,4 @@ contract OpinioNect{
     // internal
     // private
     // view & pure functions
-
 }

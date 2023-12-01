@@ -173,10 +173,10 @@ const addComment = async (articleHash, comment) => {
 }
 // addComment("article hash hu me", "me ek comment huu");
 
-// Express
+// Express routes with basic validation
 app.get('/', (req, res) => {
     res.send('Hello World!')
-})
+});
 
 app.route('/articles')
     .get((req, res) => {
@@ -185,22 +185,30 @@ app.route('/articles')
     .post((req, res) => {
         res.send("Hello World");
     });
-    // articles array from ipfs taking all the hashes from blockchain
-    // return object with key as article hash and value as article object
 
 app.get('/article/:articleName', (req, res) => {
-    res.send('Hello World!')
-})
+    const { articleName } = req.params;
+    if (!articleName || typeof articleName !== 'string') {
+        return res.status(400).send('Invalid article name');
+    }
+    res.send('Hello World!');
+});
 
 app.get('/comments/:articleHash', (req, res) => {
+    const { articleHash } = req.params;
+    if (!articleHash || typeof articleHash !== 'string') {
+        return res.status(400).send('Invalid article hash');
+    }
     res.send('Hello World!');
-    // comments of an article from blockchain
-})
+});
 
 app.post('/comment/:commentHash', (req, res) => {
-    res.send('Hello World!')
-    // post a comment on blockchain
-})
+    const { commentHash } = req.params;
+    if (!commentHash || typeof commentHash !== 'string') {
+        return res.status(400).send('Invalid comment hash');
+    }
+    res.send('Hello World!');
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

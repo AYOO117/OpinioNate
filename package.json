@@ -19,7 +19,8 @@
   "dependencies": {
     "@dfinity/agent": "^0.19.3",
     "@dfinity/candid": "^0.19.3",
-    "@dfinity/principal": "^0.19.3"
+    "@dfinity/principal": "^0.19.3",
+    "@openzeppelin/contracts": "^5.0.0"
   },
   "devDependencies": {
     "assert": "2.0.0",
